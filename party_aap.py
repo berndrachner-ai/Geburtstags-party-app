@@ -43,36 +43,55 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# --- DATENBANK MANAGEMENT (FIRESTORE) ---
+# --- DATENBANK MANAGEMENT (FIRESTORE) MIT DIAGNOSE ---
 
 @st.cache_resource
 def get_db():
-    """Verbindet sich mit Firestore oder gibt None zurück."""
+    """Verbindet sich mit Firestore und gibt Fehlermeldungen aus."""
     if not FIREBASE_AVAILABLE:
+        st.sidebar.error("❌ Python-Modul 'firebase-admin' fehlt.")
+        st.sidebar.info("Lösung: Füge 'firebase-admin' zu requirements.txt hinzu.")
         return None
     
-    # Prüfen, ob wir schon verbunden sind
-    if not firebase_admin._apps:
-        # Wir suchen nach den Secrets in Streamlit
-        key_dict = st.secrets.get("textkey")
-        
-        # Falls der Key als String vorliegt (JSON), parsen wir ihn
-        if key_dict and isinstance(key_dict, str):
-             try:
-                key_dict = json.loads(key_dict)
-             except json.JSONDecodeError:
+    try:
+        # Prüfen, ob wir schon verbunden sind
+        if not firebase_admin._apps:
+            # Wir suchen nach den Secrets in Streamlit
+            if "textkey" not in st.secrets:
+                st.sidebar.warning("⚠️ Secret 'textkey' nicht gefunden.")
+                return None
+                
+            key_content = st.secrets["textkey"]
+            key_dict = None
+
+            # Fall A: Key ist ein String (JSON in TOML) - Das ist der Standardweg
+            if isinstance(key_content, str):
+                try:
+                    # Versuchen striktes JSON zu parsen, erlauben aber Steuerzeichen
+                    key_dict = json.loads(key_content, strict=False)
+                except json.JSONDecodeError as e:
+                    st.sidebar.error(f"❌ JSON Format-Fehler in Secrets: {e}")
+                    st.sidebar.info("Tipp: Achte auf die drei Anführungszeichen am Anfang/Ende.")
+                    return None
+            
+            # Fall B: Key wurde von Streamlit automatisch als Dict erkannt
+            elif isinstance(key_content, dict) or hasattr(key_content, "type"):
+                key_dict = dict(key_content)
+            
+            else:
+                st.sidebar.error(f"❌ Unbekanntes Format für 'textkey': {type(key_content)}")
                 return None
 
-        if key_dict:
-            try:
+            # Initialisierung versuchen
+            if key_dict:
                 cred = credentials.Certificate(key_dict)
                 firebase_admin.initialize_app(cred)
-            except Exception as e:
-                return None
-        else:
-            return None
+                
+        return firestore.client()
 
-    return firestore.client()
+    except Exception as e:
+        st.sidebar.error(f"❌ Verbindungsfehler: {e}")
+        return None
 
 def save_vote_to_db(name, properties, wishes, insider):
     db = get_db()
@@ -85,14 +104,13 @@ def save_vote_to_db(name, properties, wishes, insider):
     }
     
     if db:
-        # In Firestore speichern (Collection: 'votes')
         try:
             db.collection("votes").add(data)
             return True
-        except Exception:
+        except Exception as e:
+            st.error(f"Fehler beim Speichern: {e}")
             return False
     else:
-        # Fallback: Session State (ACHTUNG: Nicht persistent!)
         if 'local_votes' not in st.session_state:
             st.session_state['local_votes'] = []
         st.session_state['local_votes'].append(data)
@@ -103,10 +121,9 @@ def get_all_votes_from_db():
     all_props = []
     all_wishes = []
     all_insider = []
-    raw_data = [] # Für Debugging
+    raw_data = [] 
     
     if db:
-        # Daten aus Cloud laden
         try:
             docs = db.collection("votes").stream()
             for doc in docs:
@@ -119,7 +136,6 @@ def get_all_votes_from_db():
         except Exception:
             pass
     else:
-        # Daten aus lokalem Speicher laden
         if 'local_votes' in st.session_state:
             for d in st.session_state['local_votes']:
                 raw_data.append(d)
@@ -175,14 +191,19 @@ def main():
     df = load_data()
     db = get_db()
     
-    # --- STATUS ANZEIGE IN SIDEBAR ---
-    st.sidebar.title("Status")
+    # --- STATUS ANZEIGE ---
+    st.sidebar.header("Diagnose")
     if db:
-        st.sidebar.success("🟢 Online (Cloud)")
+        st.sidebar.success("✅ Datenbank Verbunden")
     else:
-        st.sidebar.error("🔴 Offline (Lokal)")
-        st.sidebar.info("Daten gehen bei Neustart verloren!")
+        st.sidebar.error("❌ Keine Verbindung")
+        # Hier geben wir einen Tipp, falls man lokal testet
+        if os.path.exists(".streamlit/secrets.toml"):
+             st.sidebar.info("Lokale secrets.toml gefunden. Format prüfen.")
+        else:
+             st.sidebar.info("Cloud Modus (oder secrets.toml fehlt lokal).")
 
+    st.sidebar.divider()
     st.sidebar.title("Navigation")
     nav = st.sidebar.radio("Gehe zu:", ["🎉 Für Gäste", "🔐 Host / Admin"])
 
@@ -231,44 +252,39 @@ def render_guest_view(df, db_connected):
                 if saved:
                     st.success("Gespeichert in der Cloud! ☁️")
                 else:
-                    st.warning("Nur lokal gespeichert! (Warnung: Nicht persistent)")
+                    st.warning("Nur lokal gespeichert! (Siehe Diagnose links)")
                 time.sleep(2)
                 st.rerun()
 
 def render_host_view():
     st.title("🔐 Admin Dashboard")
     
-    # Daten holen
     props, wishes, insiders, raw_data = get_all_votes_from_db()
     count = len(raw_data)
     st.metric("Eingegangene Stimmzettel", count)
 
-    tab1, tab2, tab3 = st.tabs(["Statistik", "KI Generator", "🕵️ Debug / Rohdaten"])
+    tab1, tab2, tab3 = st.tabs(["Statistik", "KI Generator", "🕵️ Debug"])
     
     with tab1:
         c1, c2 = st.columns(2)
         top_props = []
         top_wishes = []
-        
         if props:
             c = Counter(props)
             top_props = [k for k, v in c.most_common(5)]
             c1.subheader("Top Eigenschaften")
             c1.bar_chart(pd.DataFrame.from_dict(c, orient='index', columns=['Anzahl']))
-        
         if wishes:
             c = Counter(wishes)
             top_wishes = [k for k, v in c.most_common(5)]
             c2.subheader("Top Wünsche")
             c2.bar_chart(pd.DataFrame.from_dict(c, orient='index', columns=['Anzahl']))
-            
         with st.expander("Insider Infos"):
             st.write(insiders)
 
     with tab2:
         name = st.text_input("Name", "Das Geburtstagskind")
         alter = st.number_input("Alter", 1, 120, 40)
-        
         insider_text = ""
         if insiders:
             import random
@@ -292,7 +308,7 @@ def render_host_view():
                 st.error("Key fehlt oder OpenAI Modul nicht da.")
     
     with tab3:
-        st.info("Hier siehst du alle gespeicherten Datensätze im Detail.")
+        st.info("Datenbank-Inhalt:")
         st.write(raw_data)
 
 if __name__ == "__main__":
