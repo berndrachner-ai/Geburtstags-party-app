@@ -1,9 +1,8 @@
-ï»¿Column1;Column2;Column3
 Typ;Kategorie;Text
 Eigenschaft;Herz & Seele;Herzlich
 Eigenschaft;Herz & Seele;Hilfsbereit
 Eigenschaft;Herz & Seele;Loyal / Treu
-Eigenschaft;Herz & Seele;GroÃŸzÃ¼gig
+Eigenschaft;Herz & Seele;Großzügig
 Eigenschaft;Herz & Seele;Empathisch
 Eigenschaft;Herz & Seele;Ein Sonnenschein
 Eigenschaft;Herz & Seele;Fels in der Brandung
@@ -12,19 +11,19 @@ Eigenschaft;Herz & Seele;ausstrahlend
 Eigenschaft;Herz & Seele;behutsam
 Eigenschaft;Herz & Seele;brillant
 Eigenschaft;Herz & Seele;ehrlich
-Eigenschaft;Herz & Seele;einfÃ¼hlsam
+Eigenschaft;Herz & Seele;einfühlsam
 Eigenschaft;Herz & Seele;energisch
 Eigenschaft;Kopf & Charakter;inspirierend
 Eigenschaft;Kopf & Charakter;konzentriert
 Eigenschaft;Kopf & Charakter;lebensklug
 Eigenschaft;Kopf & Charakter;standhaft
-Eigenschaft;Kopf & Charakter;visionÃ¤r
+Eigenschaft;Kopf & Charakter;visionär
 Eigenschaft;Kopf & Charakter;warmherzig
-Eigenschaft;Kopf & Charakter;wertschÃ¤tzend
+Eigenschaft;Kopf & Charakter;wertschätzend
 Eigenschaft;Kopf & Charakter;kontrolliert
 Eigenschaft;Kopf & Charakter;selbstreflektiert
 Eigenschaft;Kopf & Charakter;stark
-Eigenschaft;Kopf & Charakter;vertrauenswÃ¼rdig
+Eigenschaft;Kopf & Charakter;vertrauenswürdig
 Eigenschaft;Kopf & Charakter;warmherzig
 Eigenschaft;Kopf & Charakter;witzig
 Eigenschaft;Kopf & Charakter;kultiviert
@@ -40,7 +39,7 @@ Eigenschaft;Stimmung & Party;Party-Tier
 Eigenschaft;Stimmung & Party;Abenteuerlustig
 Eigenschaft;Stimmung & Party;Charmant
 Eigenschaft;Stimmung & Party;Laut & Lustig
-Eigenschaft;Stimmung & Party;GenieÃŸerisch
+Eigenschaft;Stimmung & Party;Genießerisch
 Eigenschaft;Stimmung & Party;ausgereift
 Eigenschaft;Stimmung & Party;charismatisch
 Eigenschaft;Stimmung & Party;clever
@@ -52,13 +51,13 @@ Eigenschaft;Stimmung & Party;naturverbunden
 Eigenschaft;Stimmung & Party;offenherzig
 Eigenschaft;Stimmung & Party;optimistisch
 Eigenschaft;Stimmung & Party;pragmatisch
-Eigenschaft;Stimmung & Party;qualitÃ¤tsbewusst
+Eigenschaft;Stimmung & Party;qualitätsbewusst
 Eigenschaft;Stimmung & Party;respektvoll
 Eigenschaft;Stimmung & Party;sanft
 Eigenschaft;Stimmung & Party;systematisch
 Eigenschaft;Stimmung & Party;treu
-Eigenschaft;Stimmung & Party;uneigennÃ¼tzig
-Eigenschaft;Stimmung & Party;verlÃ¤sslich
+Eigenschaft;Stimmung & Party;uneigennützig
+Eigenschaft;Stimmung & Party;verlässlich
 Eigenschaft;Stimmung & Party;sattelfest
 Eigenschaft;Macken (Liebenswert);Tollpatschig
 Eigenschaft;Macken (Liebenswert);Morgenmuffel
@@ -67,20 +66,20 @@ Eigenschaft;Macken (Liebenswert);Besserwisser
 Eigenschaft;Macken (Liebenswert);Vergesslich / Zerstreut
 Eigenschaft;Macken (Liebenswert);Ungeduldig
 Eigenschaft;Macken (Liebenswert);Chaotisch
-Wunsch;Wohlbefinden;Gesundheit wie ein BÃ¤r
+Wunsch;Wohlbefinden;Gesundheit wie ein Bär
 Wunsch;Wohlbefinden;Nerven aus Stahl
 Wunsch;Wohlbefinden;Innere Ruhe
 Wunsch;Wohlbefinden;Endlos viel Energie
-Wunsch;Wohlbefinden;Zeit fÃ¼r sich selbst (Me-Time)
+Wunsch;Wohlbefinden;Zeit für sich selbst (Me-Time)
 Wunsch;Erfolg & Geld;Lottogewinn
-Wunsch;Erfolg & Geld;Beruflicher HÃ¶henflug
+Wunsch;Erfolg & Geld;Beruflicher Höhenflug
 Wunsch;Erfolg & Geld;Traumauto / Traumhaus
-Wunsch;Erfolg & Geld;Dass alle PlÃ¤ne gelingen
-Wunsch;Erfolg & Geld;Voller KÃ¼hlschrank & guter Wein
+Wunsch;Erfolg & Geld;Dass alle Pläne gelingen
+Wunsch;Erfolg & Geld;Voller Kühlschrank & guter Wein
 Wunsch;Erlebnis;Spannende Weltreisen
-Wunsch;Erlebnis;LegendÃ¤re Partys
-Wunsch;Erlebnis;LachanfÃ¤lle bis der Bauch wehtut
-Wunsch;Erlebnis;Kulinarische HÃ¶hepunkte
+Wunsch;Erlebnis;Legendäre Partys
+Wunsch;Erlebnis;Lachanfälle bis der Bauch wehtut
+Wunsch;Erlebnis;Kulinarische Höhepunkte
 Wunsch;Erlebnis;Inspirierende Begegnungen
 Wunsch;Liebe;Schmetterlinge im Bauch
 Wunsch;Liebe;Treue Freunde
